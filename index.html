@@ -5,13 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>The Chronicles of Rauna</title>
     <style>
-        /* Loading a classy adventure serif font */
         @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,700;1,400&display=swap');
 
         :root {
             --bg-color: #050505;
-            --text-color: #e0d8c0; /* Slightly aged paper color */
-            --accent-color: #8b0000; /* Deep blood red for a classy look */
+            --text-color: #e0d8c0; 
+            --accent-color: #8b0000;
             --font-main: 'Crimson Text', serif;
         }
 
@@ -67,7 +66,6 @@
             padding-bottom: env(safe-area-inset-bottom, 20px);
             background: linear-gradient(180deg, #1a1a1a 0%, #050505 100%);
             border-top: 2px solid var(--accent-color);
-            box-shadow: 0 -10px 20px rgba(0,0,0,0.5);
         }
 
         #question-text {
@@ -75,16 +73,16 @@
             font-size: 1.25rem;
             text-align: center;
             margin-bottom: 15px;
-            min-height: 5em;
+            min-height: 6em;
             display: block;
             line-height: 1.4;
             overflow-y: auto;
         }
 
-        #question-text i {
-            color: #b0a890;
-            font-style: italic;
-        }
+        /* Custom Colors for Dialogue */
+        .violet { color: #ee82ee; }
+        .white { color: #ffffff; }
+        #question-text i { color: #b0a890; font-style: italic; }
 
         .button-grid {
             display: grid;
@@ -107,11 +105,6 @@
             transition: all 0.2s;
         }
 
-        .game-btn:active {
-            border-color: var(--accent-color);
-            background-color: #1a0000;
-        }
-
         .btn-label {
             font-weight: bold;
             color: var(--accent-color);
@@ -120,23 +113,7 @@
             min-width: 30px;
         }
 
-        .btn-text {
-            font-size: 1.1rem;
-        }
-
-        /* Animations */
-        @keyframes shake {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
-            100% { transform: translateX(0); }
-        }
-
-        .effect-shake {
-            animation: shake 0.3s ease-in-out;
-            border-color: #f00 !important;
-        }
+        .btn-text { font-size: 1.1rem; }
 
         @keyframes sparkle {
             0% { background-color: #111; }
@@ -144,9 +121,7 @@
             100% { background-color: #111; }
         }
 
-        .effect-sparkle {
-            animation: sparkle 0.6s ease-in-out;
-        }
+        .effect-sparkle { animation: sparkle 0.6s ease-in-out; }
     </style>
 </head>
 <body>
@@ -194,6 +169,22 @@
                 B: { label: "Continue north in search of the one who needs you.", next: "A2" }
             }
         },
+        "A2": {
+            img: "a2.png",
+            text: "This town just outside Faltin has many special memories for you. You walk down the dusty path enjoying the sounds and aromas. <i>The bakers bread always smells like heaven.</i> What do you do?",
+            buttons: {
+                A: { label: "You enter the bakery for some fresh loafs.", next: "D1" },
+                B: { label: "Rauna needs me more than ever, I must press onward.", next: "A3" }
+            }
+        },
+        "A3": {
+            img: "a3.png",
+            text: "<span class='violet'>Halt peasant! How dare you bring dirt onto the stones of Faltin!</span><br><span class='white'>I mean no harm, I only...</span><br><span class='violet'>You'll be feeling the harm of this here javelin if you don't retreat.</span><br>What do you do?",
+            buttons: {
+                A: { label: "Hide, toss a rock to distract the guards, then climb up the ivy.", next: "A4" },
+                B: { label: "Run to the right, kick off the wall and break through the gates.", next: "F1" }
+            }
+        },
         "B1": {
             img: "b1.png",
             text: "Is your distant homeland on fire?<br>What do you do?",
@@ -201,6 +192,26 @@
                 A: { label: "Ignore the inevitable, and help Rauna instead.", next: "A1" },
                 B: { label: "Run to Tisvalle.", next: "B3" }
             }
+        },
+        "B3": {
+            img: "b3.png",
+            text: "<i>Tisvalle may yet be saved!</i><br>What do you do?",
+            buttons: {
+                A: { label: "Put the children into the cart and send them to Kingdom of Faltin.", next: "B4" },
+                B: { label: "Rescue the town doctor in hopes that he may mend others wounds.", next: "B5" }
+            }
+        },
+        "B4": {
+            img: "b4.png",
+            text: "You saved the children!<br>May your name always be remembered.",
+            stopMusic: true,
+            buttons: { A: { label: "Restart", next: "START" }, B: { label: "-", next: null } }
+        },
+        "B5": {
+            img: "b5.png",
+            text: "The doctor tends to several villagers and the town of Tisvalle is forever in your debt and gratitude.",
+            stopMusic: true,
+            buttons: { A: { label: "Restart", next: "START" }, B: { label: "-", next: null } }
         },
         "C1": {
             img: "c1.png",
@@ -213,47 +224,24 @@
         "C2": {
             img: "c2.png",
             text: "King Gongo has killed you.",
-            buttons: {
-                A: { label: "May your soul revive.", next: "START" },
-                B: { label: "-", next: null }
-            }
+            buttons: { A: { label: "May your soul revive.", next: "START" }, B: { label: "-", next: null } }
         },
-        "B3": {
-            img: "b3.png",
-            text: "<i>Tisvalle may yet be saved!</i><br>What do you do?",
-            buttons: {
-                A: { label: "Put the children into the cart and send them to Kingdom of Faltin.", next: "END_PH" },
-                B: { label: "Rescue the town doctor in hopes that he may mend others wounds.", next: "END_PH" }
-            }
-        },
-        "A2": {
-            img: "a2.png",
-            text: "You continue North...",
-            buttons: {
-                A: { label: "Continue", next: "START" },
-                B: { label: "-", next: null }
-            }
-        },
-        "END_PH": {
-            img: "0.png",
-            text: "To be continued...",
-            buttons: {
-                A: { label: "Restart", next: "START" },
-                B: { label: "-", next: null }
-            }
-        }
+        "D1": { img: "d1.png", text: "The bread is delicious...", buttons: { A: { label: "Restart", next: "START" }, B: { label: "-", next: null } } },
+        "A4": { img: "a4.png", text: "You scale the ivy...", buttons: { A: { label: "Restart", next: "START" }, B: { label: "-", next: null } } },
+        "F1": { img: "f1.png", text: "You crash through the gates!", buttons: { A: { label: "Restart", next: "START" }, B: { label: "-", next: null } } }
     };
-
-    function startMusic() {
-        if (!musicStarted) {
-            const music = document.getElementById("bg-music");
-            music.play().catch(() => {});
-            musicStarted = true;
-        }
-    }
 
     function updateUI() {
         const scene = gameData[currentState];
+        const music = document.getElementById("bg-music");
+
+        // Logic to stop music on specific endings
+        if (scene.stopMusic) {
+            music.pause();
+            music.currentTime = 0;
+            musicStarted = false; 
+        }
+
         document.getElementById("game-img").src = scene.img;
         document.getElementById("question-text").innerHTML = scene.text;
         document.getElementById("stage").style.opacity = "1";
@@ -261,7 +249,6 @@
         ['A', 'B'].forEach(key => {
             const btn = document.getElementById("btn" + key);
             const data = scene.buttons[key];
-            
             btn.className = "game-btn";
             document.getElementById("text" + key).innerText = data.label;
             btn.style.display = data.next === null ? "none" : "flex";
@@ -269,23 +256,18 @@
     }
 
     function handleInput(key) {
-        startMusic();
-        const nextState = gameData[currentState].buttons[key].next;
-
-        const btn = document.getElementById("btn" + key);
-        // If it's a death scene or loop back, use shake
-        if (currentState === "C2" || nextState === "START") {
-            btn.classList.add("effect-shake");
-        } else {
-            btn.classList.add("effect-sparkle");
+        if (!musicStarted && !gameData[currentState].stopMusic) {
+            document.getElementById("bg-music").play().catch(() => {});
+            musicStarted = true;
         }
+
+        const nextState = gameData[currentState].buttons[key].next;
+        const btn = document.getElementById("btn" + key);
+        btn.classList.add("effect-sparkle");
 
         setTimeout(() => {
             document.getElementById("stage").style.opacity = "0";
-            setTimeout(() => { 
-                currentState = nextState; 
-                updateUI(); 
-            }, 600);
+            setTimeout(() => { currentState = nextState; updateUI(); }, 600);
         }, 400);
     }
 
