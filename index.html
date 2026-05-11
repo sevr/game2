@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>The Chronicles of Rauna</title>
+    <style>
+        /* Loading a classy adventure serif font */
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,700;1,400&display=swap');
+
+        :root {
+            --bg-color: #050505;
+            --text-color: #e0d8c0; /* Slightly aged paper color */
+            --accent-color: #8b0000; /* Deep blood red for a classy look */
+            --font-main: 'Crimson Text', serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body, html {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background-color: var(--bg-color);
+            font-family: var(--font-main);
+            display: flex;
+            justify-content: center;
+        }
+
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            height: 100dvh; 
+            width: 100%;
+            max-width: 500px; 
+            margin: 0 auto;
+            transition: opacity 0.8s ease-in-out;
+            background-color: #000;
+        }
+
+        #image-viewer {
+            flex: 1.1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #000;
+            overflow: hidden;
+        }
+
+        #game-img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        #ui-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            padding-bottom: env(safe-area-inset-bottom, 20px);
+            background: linear-gradient(180deg, #1a1a1a 0%, #050505 100%);
+            border-top: 2px solid var(--accent-color);
+            box-shadow: 0 -10px 20px rgba(0,0,0,0.5);
+        }
+
+        #question-text {
+            color: var(--text-color);
+            font-size: 1.25rem;
+            text-align: center;
+            margin-bottom: 15px;
+            min-height: 5em;
+            display: block;
+            line-height: 1.4;
+            overflow-y: auto;
+        }
+
+        #question-text i {
+            color: #b0a890;
+            font-style: italic;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-gap: 12px;
+            flex: 1;
+        }
+
+        .game-btn {
+            background-color: #111;
+            border: 1px solid #444;
+            color: var(--text-color);
+            font-family: var(--font-main);
+            border-radius: 2px;
+            padding: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            text-align: left;
+            transition: all 0.2s;
+        }
+
+        .game-btn:active {
+            border-color: var(--accent-color);
+            background-color: #1a0000;
+        }
+
+        .btn-label {
+            font-weight: bold;
+            color: var(--accent-color);
+            font-size: 1.4rem;
+            margin-right: 15px;
+            min-width: 30px;
+        }
+
+        .btn-text {
+            font-size: 1.1rem;
+        }
+
+        /* Animations */
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+
+        .effect-shake {
+            animation: shake 0.3s ease-in-out;
+            border-color: #f00 !important;
+        }
+
+        @keyframes sparkle {
+            0% { background-color: #111; }
+            50% { background-color: #333; box-shadow: 0 0 15px var(--accent-color); }
+            100% { background-color: #111; }
+        }
+
+        .effect-sparkle {
+            animation: sparkle 0.6s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+
+<audio id="bg-music" src="music.mp3" loop preload="auto"></audio>
+
+<div class="game-container" id="stage">
+    <div id="image-viewer">
+        <img id="game-img" src="0.png">
+    </div>
+
+    <div id="ui-panel">
+        <div id="question-text"></div>
+        <div class="button-grid">
+            <button class="game-btn" id="btnA" onclick="handleInput('A')">
+                <span class="btn-label">A</span>
+                <span class="btn-text" id="textA"></span>
+            </button>
+            <button class="game-btn" id="btnB" onclick="handleInput('B')">
+                <span class="btn-label">B</span>
+                <span class="btn-text" id="textB"></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentState = "START";
+    let musicStarted = false;
+
+    const gameData = {
+        "START": {
+            img: "0.png",
+            text: "You awake from the sound gentle hoof like footsteps, deer leading their young away from the soft river soil, back home.<br><i>It would be nice to be home</i> you think to yourself.<br><i>Yet, Rauna needs my aide...</i><br>What do you do?",
+            buttons: {
+                A: { label: "Venture up river in search of Rauna.", next: "A1" },
+                B: { label: "Go towards the rising sun, hoping to find a home still in Tisvalle.", next: "B1" }
+            }
+        },
+        "A1": {
+            img: "a1.png",
+            text: "The kingdom of Faltin is ahead.<br><i>Rauna may be there, if the rumor is true.</i><br>What do you do?",
+            buttons: {
+                A: { label: "Capture a monkey and ride a deer into the dark forest.", next: "C1" },
+                B: { label: "Continue north in search of the one who needs you.", next: "A2" }
+            }
+        },
+        "B1": {
+            img: "b1.png",
+            text: "Is your distant homeland on fire?<br>What do you do?",
+            buttons: {
+                A: { label: "Ignore the inevitable, and help Rauna instead.", next: "A1" },
+                B: { label: "Run to Tisvalle.", next: "B3" }
+            }
+        },
+        "C1": {
+            img: "c1.png",
+            text: "You are confronted by King Gongo, ape of supreme power.<br>What do you do?",
+            buttons: {
+                A: { label: "Duel King Gongo to take dominion over the entire forest.", next: "C2" },
+                B: { label: "Flee!", next: "A1" }
+            }
+        },
+        "C2": {
+            img: "c2.png",
+            text: "King Gongo has killed you.",
+            buttons: {
+                A: { label: "May your soul revive.", next: "START" },
+                B: { label: "-", next: null }
+            }
+        },
+        "B3": {
+            img: "b3.png",
+            text: "<i>Tisvalle may yet be saved!</i><br>What do you do?",
+            buttons: {
+                A: { label: "Put the children into the cart and send them to Kingdom of Faltin.", next: "END_PH" },
+                B: { label: "Rescue the town doctor in hopes that he may mend others wounds.", next: "END_PH" }
+            }
+        },
+        "A2": {
+            img: "a2.png",
+            text: "You continue North...",
+            buttons: {
+                A: { label: "Continue", next: "START" },
+                B: { label: "-", next: null }
+            }
+        },
+        "END_PH": {
+            img: "0.png",
+            text: "To be continued...",
+            buttons: {
+                A: { label: "Restart", next: "START" },
+                B: { label: "-", next: null }
+            }
+        }
+    };
+
+    function startMusic() {
+        if (!musicStarted) {
+            const music = document.getElementById("bg-music");
+            music.play().catch(() => {});
+            musicStarted = true;
+        }
+    }
+
+    function updateUI() {
+        const scene = gameData[currentState];
+        document.getElementById("game-img").src = scene.img;
+        document.getElementById("question-text").innerHTML = scene.text;
+        document.getElementById("stage").style.opacity = "1";
+
+        ['A', 'B'].forEach(key => {
+            const btn = document.getElementById("btn" + key);
+            const data = scene.buttons[key];
+            
+            btn.className = "game-btn";
+            document.getElementById("text" + key).innerText = data.label;
+            btn.style.display = data.next === null ? "none" : "flex";
+        });
+    }
+
+    function handleInput(key) {
+        startMusic();
+        const nextState = gameData[currentState].buttons[key].next;
+
+        const btn = document.getElementById("btn" + key);
+        // If it's a death scene or loop back, use shake
+        if (currentState === "C2" || nextState === "START") {
+            btn.classList.add("effect-shake");
+        } else {
+            btn.classList.add("effect-sparkle");
+        }
+
+        setTimeout(() => {
+            document.getElementById("stage").style.opacity = "0";
+            setTimeout(() => { 
+                currentState = nextState; 
+                updateUI(); 
+            }, 600);
+        }, 400);
+    }
+
+    window.onload = updateUI;
+</script>
+</body>
+</html>
