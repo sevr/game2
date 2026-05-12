@@ -9,7 +9,7 @@
 
         :root {
             --bg-color: #050505;
-            --text-color: #e0d8c0; 
+            --text-color: #d2b48c; 
             --accent-color: #8b0000;
             --font-main: 'Crimson Text', serif;
         }
@@ -79,13 +79,12 @@
             overflow-y: auto;
         }
 
-        /* Dialogue Colors */
-        .violet { color: #ee82ee; }
         .white { color: #ffffff; }
+        .violet { color: #ee82ee; }
         .blue { color: #3498db; }
         .red { color: #ff4d4d; }
         .green { color: #2ecc71; }
-        #question-text i { color: #b0a890; font-style: italic; }
+        .pink { color: #ff69b4; }
 
         .button-grid {
             display: grid;
@@ -118,6 +117,9 @@
 
         .btn-text { font-size: 1.1rem; }
 
+        .effect-sparkle { animation: sparkle 0.6s ease-in-out; }
+        .effect-shake { animation: shake 0.3s ease-in-out; border-color: #f00 !important; }
+
         @keyframes sparkle {
             0% { background-color: #111; }
             50% { background-color: #333; box-shadow: 0 0 15px var(--accent-color); }
@@ -132,8 +134,15 @@
             100% { transform: translateX(0); }
         }
 
-        .effect-sparkle { animation: sparkle 0.6s ease-in-out; }
-        .effect-shake { animation: shake 0.3s ease-in-out; border-color: #f00 !important; }
+        #victory-screen {
+            display: none;
+            color: var(--text-color);
+            font-size: 2rem;
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
     </style>
 </head>
 <body>
@@ -143,11 +152,12 @@
 <div class="game-container" id="stage">
     <div id="image-viewer">
         <img id="game-img" src="0.png">
+        <div id="victory-screen">You beat the game. Nice work!</div>
     </div>
 
     <div id="ui-panel">
         <div id="question-text"></div>
-        <div class="button-grid">
+        <div class="button-grid" id="btn-grid">
             <button class="game-btn" id="btnA" onclick="handleInput('A')">
                 <span class="btn-label">A</span>
                 <span class="btn-text" id="textA"></span>
@@ -167,7 +177,7 @@
     const gameData = {
         "START": {
             img: "0.png",
-            text: "You awake from the sound gentle hoof like footsteps, deer leading their young away from the soft river soil, back home.<br><i>It would be nice to be home</i> you think to yourself.<br><i>Yet, Rauna needs my aide...</i><br>What do you do?",
+            text: "You awake from the sound gentle hoof like footsteps, deer leading their young away from the soft river soil, back home.<br><span class='white'>It would be nice to be home</span> you think to yourself.<br><span class='white'>Yet, Rauna needs my aide...</span><br>What do you do?",
             buttons: {
                 A: { label: "Venture up river in search of Rauna.", next: "A1" },
                 B: { label: "Go towards the rising sun, hoping to find a home still in Tisvalle.", next: "B1" }
@@ -175,7 +185,7 @@
         },
         "A1": {
             img: "a1.png",
-            text: "The kingdom of Faltin is ahead.<br><i>Rauna may be there, if the rumor is true.</i><br>What do you do?",
+            text: "The kingdom of Faltin is ahead.<br><span class='white'>Rauna may be there, if the rumor is true.</span><br>What do you do?",
             buttons: {
                 A: { label: "Capture a monkey and ride a deer into the dark forest.", next: "C1" },
                 B: { label: "Continue north in search of the one who needs you.", next: "A2" }
@@ -183,7 +193,7 @@
         },
         "A2": {
             img: "a2.png",
-            text: "This town just outside Faltin has many special memories for you. You walk down the dusty path enjoying the sounds and aromas. <i>The bakers bread always smells like heaven.</i> What do you do?",
+            text: "This town just outside Faltin has many special memories for you. You walk down the dusty path enjoying the sounds and aromas. <span class='white'>The bakers bread always smells like heaven.</span> What do you do?",
             buttons: {
                 A: { label: "You enter the bakery for some fresh loafs.", next: "D1" },
                 B: { label: "Rauna needs me more than ever, I must press onward.", next: "A3" }
@@ -229,7 +239,7 @@
             img: "a5.png",
             text: "The sinister King of Faltin is in the midst of their annual summer feast of Mova... <span class='white'>Excellent. After he adds a few more pounds to his ugly gut I'll jump down and make him surrender Rauna.</span><br>What do you do?",
             buttons: {
-                A: { label: "[white font]I can't wait any longer![end white font] You throw your dragger.", next: "G1" },
+                A: { label: "I can't wait any longer, the gluttony is unending!", next: "G1", textClass: "white" },
                 B: { label: "Wait until the first stars appear and yell with a roar.", next: "A6" }
             }
         },
@@ -271,8 +281,22 @@
         },
         "A8": {
             img: "a8.png",
-            text: "You see Rauna standing at the window.",
-            buttons: { A: { label: "Continue", next: "START" }, B: { label: "-", next: null } }
+            text: "You see Rauna standing at the window. You wonder how much distress she has endured these past months being locked away. Perhaps a gift will cheer her.<br>What do you give?",
+            buttons: { 
+                A: { label: "You toss the coins you found.", next: "H1" }, 
+                B: { label: "You throw the rope you found.", next: "A9" } 
+            }
+        },
+        "H1": {
+            img: "h1.png",
+            text: "She is greatly offended it seems.",
+            buttons: { A: { label: "Try again?", next: "A8" }, B: { label: "-", next: null } }
+        },
+        "A9": {
+            img: "a9.png",
+            text: "You massively miscalculate your throw and bonk her head with the rope, and her, tumbling out the window.<br><span class='pink'>Ouch!</span><br>You dive after her.",
+            isEnd: true,
+            buttons: { A: { label: "-", next: null }, B: { label: "-", next: null } }
         },
         "B1": {
             img: "b1.png",
@@ -284,7 +308,7 @@
         },
         "B3": {
             img: "b3.png",
-            text: "<i>Tisvalle may yet be saved!</i><br>What do you do?",
+            text: "<span class='white'>Tisvalle may yet be saved!</span><br>What do you do?",
             buttons: {
                 A: { label: "Put the children into the cart.", next: "B4" },
                 B: { label: "Rescue the town doctor.", next: "B5" }
@@ -332,12 +356,32 @@
         document.getElementById("question-text").innerHTML = scene.text;
         document.getElementById("stage").style.opacity = "1";
 
+        if (scene.isEnd) {
+            document.getElementById("btn-grid").style.display = "none";
+            setTimeout(() => {
+                document.getElementById("game-img").style.display = "none";
+                document.getElementById("question-text").style.display = "none";
+                document.getElementById("victory-screen").style.display = "flex";
+            }, 12000);
+        } else {
+            document.getElementById("btn-grid").style.display = "grid";
+            document.getElementById("game-img").style.display = "block";
+            document.getElementById("question-text").style.display = "block";
+            document.getElementById("victory-screen").style.display = "none";
+        }
+
         ['A', 'B'].forEach(key => {
             const btn = document.getElementById("btn" + key);
+            const btnText = document.getElementById("text" + key);
             const data = scene.buttons[key];
-            btn.className = "game-btn";
-            document.getElementById("text" + key).innerText = data ? data.label : "-";
-            btn.style.display = (data && data.next !== null) ? "flex" : "none";
+            
+            if (data && data.next !== null) {
+                btnText.innerText = data.label;
+                btnText.className = data.textClass === "white" ? "btn-text white" : "btn-text";
+                btn.style.display = "flex";
+            } else {
+                btn.style.display = "none";
+            }
         });
     }
 
