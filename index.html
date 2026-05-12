@@ -177,7 +177,7 @@
     const gameData = {
         "START": {
             img: "0.png",
-            text: "You awake from the sound gentle hoof like footsteps, deer leading their young away from the soft river soil, back home.<br><span class='white'>It would be nice to be home</span> you think to yourself.<br><span class='white'>Yet, Rauna needs my aide...</span><br>What do you do?",
+            text: "Awaken by the sound of gentle hoof like footsteps, deer leading their young away from the soft river soil, back home.<br><span class='white'>It would be nice to be home</span> you think to yourself.<br><span class='white'>Yet, Rauna needs my aide...</span><br>What do you do?",
             buttons: {
                 A: { label: "Venture up river in search of Rauna.", next: "A1" },
                 B: { label: "Go towards the rising sun, hoping to find a home still in Tisvalle.", next: "B1" }
@@ -223,7 +223,7 @@
         },
         "F1": {
             img: "f1.png",
-            text: "<span class='violet'>Typical heroic fool! You surmize us to be simply for on your epic quest, ha! Ha! HA! Looks like we're your final boss.</span><br>You sit, dead.",
+            text: "<span class='violet'>Typical heroic fool! You surmize us as simple foe on your epic quest, ha! Ha! HA! Turns out we're your final boss.</span><br>You sit, dead.",
             isDeath: true,
             buttons: { A: { label: "Try Again", next: "START" }, B: { label: "-", next: null } }
         },
@@ -237,7 +237,7 @@
         },
         "A5": {
             img: "a5.png",
-            text: "The sinister King of Faltin is in the midst of their annual summer feast of Mova... <span class='white'>Excellent. After he adds a few more pounds to his ugly gut I'll jump down and make him surrender Rauna.</span><br>What do you do?",
+            text: "The sinister King of Faltin is in the midst of their annual summer feast of Mova. <span class='white'>Excellent. After he adds a few more pounds to his ugly gut I'll jump down and make him surrender Rauna.</span><br>What do you do?",
             buttons: {
                 A: { label: "I can't wait any longer, the gluttony is unending!", next: "G1", textClass: "white" },
                 B: { label: "Wait until the first stars appear and yell with a roar.", next: "A6" }
@@ -267,7 +267,7 @@
         },
         "E1": {
             img: "e1.png",
-            text: "<span class='green'>The portion is nearly complete. Yes yes... hazel of witch will resolve the last hiccup. Lad, drink up, this is what you need to defeat evil.</span><br>What do you do?",
+            text: "<span class='green'>The potion is nearly complete. Yes yes... hazel of witch will resolve the last hiccup. Lad, drink up, this is what you need to defeat evil.</span><br>What do you do?",
             buttons: {
                 A: { label: "Drink.", next: "E2" },
                 B: { label: "Walk away.", next: "A7" }
@@ -294,7 +294,7 @@
         },
         "A9": {
             img: "a9.png",
-            text: "You massively miscalculate your throw and bonk her head with the rope, and her, tumbling out the window.<br><span class='pink'>Ouch!</span><br>You dive after her.",
+            text: "You massively miscalculate your throw and bonk her head with the rope, there she goes tumbling out the window.<br><span class='pink'>Ouch!</span><br>You dive after her.",
             isEnd: true,
             buttons: { A: { label: "-", next: null }, B: { label: "-", next: null } }
         },
@@ -406,8 +406,8 @@
             setTimeout(() => { 
                 currentState = nextState; 
                 updateUI(); 
-            }, 600);
-        }, 400);
+            }, 1600);
+        }, 1400);
     }
 
     window.onload = updateUI;
