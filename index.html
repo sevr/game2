@@ -79,9 +79,12 @@
             overflow-y: auto;
         }
 
-        /* Custom Colors for Dialogue */
+        /* Dialogue Colors */
         .violet { color: #ee82ee; }
         .white { color: #ffffff; }
+        .blue { color: #3498db; }
+        .red { color: #ff4d4d; }
+        .green { color: #2ecc71; }
         #question-text i { color: #b0a890; font-style: italic; }
 
         .button-grid {
@@ -121,7 +124,16 @@
             100% { background-color: #111; }
         }
 
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+
         .effect-sparkle { animation: sparkle 0.6s ease-in-out; }
+        .effect-shake { animation: shake 0.3s ease-in-out; border-color: #f00 !important; }
     </style>
 </head>
 <body>
@@ -177,6 +189,20 @@
                 B: { label: "Rauna needs me more than ever, I must press onward.", next: "A3" }
             }
         },
+        "D1": {
+            img: "d1.png",
+            text: "<span class='blue'>Young hero, has been many moons since your face came to these parts!</span><br><span class='white'>Indeed sir. Many many days indeed. Say, do you still bake that visan sweet bread?</span><br><span class='blue'>Oh my yeast, that's a request. Umm, this small loaf has been sitting here since last week. Consume at your own risk, haha.</span><br>What do you do?",
+            buttons: {
+                A: { label: "Quickly drop a copper coin, grab the loaf and scarf it down.", next: "D2" },
+                B: { label: "Ignore the stale bread and continue outside.", next: "A2" }
+            }
+        },
+        "D2": {
+            img: "d2.png",
+            text: "The yeast and sugars, after sitting a week in the sun, had formed a rare molecular compund called Death Yeast. You enjoyed the memories for 1.4 minutes, then you lay dead.",
+            isDeath: true,
+            buttons: { A: { label: "Try Again", next: "START" }, B: { label: "-", next: null } }
+        },
         "A3": {
             img: "a3.png",
             text: "<span class='violet'>Halt peasant! How dare you bring dirt onto the stones of Faltin!</span><br><span class='white'>I mean no harm, I only...</span><br><span class='violet'>You'll be feeling the harm of this here javelin if you don't retreat.</span><br>What do you do?",
@@ -184,6 +210,69 @@
                 A: { label: "Hide, toss a rock to distract the guards, then climb up the ivy.", next: "A4" },
                 B: { label: "Run to the right, kick off the wall and break through the gates.", next: "F1" }
             }
+        },
+        "F1": {
+            img: "f1.png",
+            text: "<span class='violet'>Typical heroic fool! You surmize us to be simply for on your epic quest, ha! Ha! HA! Looks like we're your final boss.</span><br>You sit, dead.",
+            isDeath: true,
+            buttons: { A: { label: "Try Again", next: "START" }, B: { label: "-", next: null } }
+        },
+        "A4": {
+            img: "a4.png",
+            text: "Always convenient to have ivy outside a window. Looking around the vacant quarters, you consider what to add to your satchel before finding Rauna.<br>What do you grab?",
+            buttons: {
+                A: { label: "You take the rope.", next: "A5" },
+                B: { label: "You take the coins.", next: "A5" }
+            }
+        },
+        "A5": {
+            img: "a5.png",
+            text: "The sinister King of Faltin is in the midst of their annual summer feast of Mova... <span class='white'>Excellent. After he adds a few more pounds to his ugly gut I'll jump down and make him surrender Rauna.</span><br>What do you do?",
+            buttons: {
+                A: { label: "[white font]I can't wait any longer![end white font] You throw your dragger.", next: "G1" },
+                B: { label: "Wait until the first stars appear and yell with a roar.", next: "A6" }
+            }
+        },
+        "G1": {
+            img: "g1.png",
+            text: "The land may yet have peace thanks to your swift dagger toss... Unfortunately, you will never see those days, because, arrows struck you mortally dead.",
+            isDeath: true,
+            buttons: { A: { label: "Try Again", next: "START" }, B: { label: "-", next: null } }
+        },
+        "A6": {
+            img: "a6.png",
+            text: "<span class='red'>I hate swine, except on my plate. And you really hurt my feeling by bringing attention to my ugly fat rolls... I'm going to chop you.</span><br><span class='white'>Your emotions bleed eh? Yes, that was the point. And now more feelings will be in pain after I swing this blade!</span>",
+            buttons: {
+                A: { label: "Swing your blade and end his reign.", next: "A7" },
+                B: { label: "Fear grips your soul. You sprint away.", next: "A7" }
+            }
+        },
+        "A7": {
+            img: "a7.png",
+            text: "You are standing in the hallway. Still terrified about what just occurred in the prior room. Frantically you open a door and hide inside.<br>Which door?",
+            buttons: {
+                A: { label: "The blue door.", next: "E1" },
+                B: { label: "The brown door.", next: "A8" }
+            }
+        },
+        "E1": {
+            img: "e1.png",
+            text: "<span class='green'>The portion is nearly complete. Yes yes... hazel of witch will resolve the last hiccup. Lad, drink up, this is what you need to defeat evil.</span><br>What do you do?",
+            buttons: {
+                A: { label: "Drink.", next: "E2" },
+                B: { label: "Walk away.", next: "A7" }
+            }
+        },
+        "E2": {
+            img: "e2.png",
+            text: "You are not dead. You are... a toad.",
+            isDeath: true,
+            buttons: { A: { label: "Restart", next: "START" }, B: { label: "-", next: null } }
+        },
+        "A8": {
+            img: "a8.png",
+            text: "You see Rauna standing at the window.",
+            buttons: { A: { label: "Continue", next: "START" }, B: { label: "-", next: null } }
         },
         "B1": {
             img: "b1.png",
@@ -197,8 +286,8 @@
             img: "b3.png",
             text: "<i>Tisvalle may yet be saved!</i><br>What do you do?",
             buttons: {
-                A: { label: "Put the children into the cart and send them to Kingdom of Faltin.", next: "B4" },
-                B: { label: "Rescue the town doctor in hopes that he may mend others wounds.", next: "B5" }
+                A: { label: "Put the children into the cart.", next: "B4" },
+                B: { label: "Rescue the town doctor.", next: "B5" }
             }
         },
         "B4": {
@@ -209,7 +298,7 @@
         },
         "B5": {
             img: "b5.png",
-            text: "The doctor tends to several villagers and the town of Tisvalle is forever in your debt and gratitude.",
+            text: "The doctor tends to several villagers and the town of Tisvalle is forever in your debt.",
             stopMusic: true,
             buttons: { A: { label: "Restart", next: "START" }, B: { label: "-", next: null } }
         },
@@ -217,25 +306,22 @@
             img: "c1.png",
             text: "You are confronted by King Gongo, ape of supreme power.<br>What do you do?",
             buttons: {
-                A: { label: "Duel King Gongo to take dominion over the entire forest.", next: "C2" },
+                A: { label: "Duel King Gongo.", next: "C2" },
                 B: { label: "Flee!", next: "A1" }
             }
         },
         "C2": {
             img: "c2.png",
             text: "King Gongo has killed you.",
+            isDeath: true,
             buttons: { A: { label: "May your soul revive.", next: "START" }, B: { label: "-", next: null } }
-        },
-        "D1": { img: "d1.png", text: "The bread is delicious...", buttons: { A: { label: "Restart", next: "START" }, B: { label: "-", next: null } } },
-        "A4": { img: "a4.png", text: "You scale the ivy...", buttons: { A: { label: "Restart", next: "START" }, B: { label: "-", next: null } } },
-        "F1": { img: "f1.png", text: "You crash through the gates!", buttons: { A: { label: "Restart", next: "START" }, B: { label: "-", next: null } } }
+        }
     };
 
     function updateUI() {
         const scene = gameData[currentState];
         const music = document.getElementById("bg-music");
 
-        // Logic to stop music on specific endings
         if (scene.stopMusic) {
             music.pause();
             music.currentTime = 0;
@@ -250,24 +336,33 @@
             const btn = document.getElementById("btn" + key);
             const data = scene.buttons[key];
             btn.className = "game-btn";
-            document.getElementById("text" + key).innerText = data.label;
-            btn.style.display = data.next === null ? "none" : "flex";
+            document.getElementById("text" + key).innerText = data ? data.label : "-";
+            btn.style.display = (data && data.next !== null) ? "flex" : "none";
         });
     }
 
     function handleInput(key) {
-        if (!musicStarted && !gameData[currentState].stopMusic) {
+        const scene = gameData[currentState];
+        if (!musicStarted && !scene.stopMusic) {
             document.getElementById("bg-music").play().catch(() => {});
             musicStarted = true;
         }
 
-        const nextState = gameData[currentState].buttons[key].next;
+        const nextState = scene.buttons[key].next;
         const btn = document.getElementById("btn" + key);
-        btn.classList.add("effect-sparkle");
+
+        if (scene.isDeath || nextState === "START") {
+            btn.classList.add("effect-shake");
+        } else {
+            btn.classList.add("effect-sparkle");
+        }
 
         setTimeout(() => {
             document.getElementById("stage").style.opacity = "0";
-            setTimeout(() => { currentState = nextState; updateUI(); }, 600);
+            setTimeout(() => { 
+                currentState = nextState; 
+                updateUI(); 
+            }, 600);
         }, 400);
     }
 
